@@ -20,9 +20,12 @@ import net.minecraft.network.chat.Component
 
 // StructureIota should store a REFERENCE to a stored structure instead of the structure template itself (to prevent duplication)
 // If it doesn't here, that's because debug and to-do, etc.
+// todo: store as a reference
+// todo: figure out how to represent the data (display)
 class StructureIota(structure: StructureTemplate) : Iota(TYPE, structure) {
     override fun isTruthy() = true
     override fun toleratesOther(that: Iota) = typesMatch(this, that) && this.payload == (that as StructureIota).payload
+    val structure = payload as StructureTemplate
 
     override fun serialize(): CompoundTag {
         val tag = (payload as StructureTemplate).save(CompoundTag())
@@ -41,14 +44,22 @@ class StructureIota(structure: StructureTemplate) : Iota(TYPE, structure) {
                 return StructureIota(t)
             }
 
-            override fun display(tag: Tag?): Component {
-                TODO("Not yet implemented")
-                return Component.literal("debug").withStyle(ChatFormatting.DARK_GREEN)
+            override fun display(tag: Tag): Component {
+                //return Component.literal(arrayToString((tag as CompoundTag).getIntArray("size"))).withStyle(ChatFormatting.DARK_GREEN)
+                System.out.println((tag as CompoundTag).toString());
+                return Component.literal((tag as CompoundTag).toString()).withStyle(ChatFormatting.DARK_GREEN)
             }
 
             override fun color(): Int {
-                TODO("Not yet implemented")
                 return 0x118840
+            }
+
+            fun arrayToString(array: IntArray) : String {
+                var result = ""
+                for (item in array) {
+                    result += "$item "
+                }
+                return result
             }
         }
     }
