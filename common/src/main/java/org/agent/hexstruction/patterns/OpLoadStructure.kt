@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
+import org.agent.hexstruction.Utils
 
 // todo: adjust cost based on targeted blocks
 // todo: load from a reference and clear it
@@ -22,17 +23,13 @@ class OpLoadStructure : ConstMediaAction {
     override val mediaCost = MediaConstants.CRYSTAL_UNIT
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val origin = getBlockPos((args[0] as Vec3Iota).vec3)
+        val origin = Utils.GetBlockPos((args[0] as Vec3Iota).vec3)
         val structure = (args[1] as StructureIota).structure
 
         val settings = StructurePlaceSettings()
 
         structure.placeInWorld(env.world, origin, origin, settings, env.world.random, Block.UPDATE_CLIENTS)
 
-        return listOf(StructureIota(structure))
-    }
-
-    fun getBlockPos(vector: Vec3): BlockPos {
-        return BlockPos(vector.x.toInt(), vector.y.toInt(), vector.z.toInt())
+        return listOf()
     }
 }
