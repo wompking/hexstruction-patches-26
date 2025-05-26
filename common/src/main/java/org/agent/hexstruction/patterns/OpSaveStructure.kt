@@ -13,11 +13,11 @@ import net.minecraft.core.Vec3i
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
+import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
 
 // todo: break blocks when saving
 // todo: adjust cost based on targeted blocks
-// todo: save a reference to the iota, not the structure itself
 class OpSaveStructure : ConstMediaAction {
     override val argc = 2
     override val mediaCost = MediaConstants.CRYSTAL_UNIT
@@ -34,6 +34,8 @@ class OpSaveStructure : ConstMediaAction {
 
         structure.fillFromWorld(env.world, origin, bounds, false, Blocks.AIR)
 
-        return listOf(StructureIota(structure))
+        val uuid = StructureManager.SaveStructure(env.world, structure)
+
+        return listOf(StructureIota(uuid, env.world))
     }
 }

@@ -17,50 +17,42 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
+import java.util.UUID
 
-// StructureIota should store a REFERENCE to a stored structure instead of the structure template itself (to prevent duplication)
-// If it doesn't here, that's because debug and to-do, etc.
-// todo: store as a reference
 // todo: figure out how to represent the data (display)
-class StructureIota(structure: StructureTemplate) : Iota(TYPE, structure) {
+class StructureIota(structureUUID: UUID, world: Level) : Iota(TYPE, structureUUID) {
     override fun isTruthy() = true
     override fun toleratesOther(that: Iota) = typesMatch(this, that) && this.payload == (that as StructureIota).payload
-    val structure = payload as StructureTemplate
+    val uuid = payload as UUID
+    val world = world
 
     override fun serialize(): CompoundTag {
-        val tag = (payload as StructureTemplate).save(CompoundTag())
+        val tag = CompoundTag()
+        tag.putUUID("uuid", uuid)
+        tag.putBoolean("referenceExists", StructureManager.CheckStructureSaved(world, uuid))
         return tag
     }
 
     companion object {
         @JvmField
         val TYPE: IotaType<StructureIota> = object : IotaType<StructureIota>() {
-            override fun deserialize(
-                tag: Tag,
-                world: ServerLevel
-            ): StructureIota {
-                var t = StructureTemplate()
-                t.load(world.holderLookup(Registries.BLOCK), tag as CompoundTag)
-                return StructureIota(t)
+            override fun deserialize(tag: Tag, world: ServerLevel) : StructureIota {
+                tag as CompoundTag
+                val uuid = tag.getUUID("uuid")
+                tag.putBoolean("referenceExists", StructureManager.CheckStructureSaved(world, uuid))
+                return StructureIota(uuid, world)
             }
 
-            override fun display(tag: Tag): Component {
-                //return Component.literal(arrayToString((tag as CompoundTag).getIntArray("size"))).withStyle(ChatFormatting.DARK_GREEN)
-                System.out.println((tag as CompoundTag).toString());
-                return Component.literal((tag as CompoundTag).toString()).withStyle(ChatFormatting.DARK_GREEN)
-            }
-
-            override fun color(): Int {
-                return 0x118840
-            }
-
-            fun arrayToString(array: IntArray) : String {
-                var result = ""
-                for (item in array) {
-                    result += "$item "
+            override fun display(tag: Tag) : Component {
+                val uuid = (tag as CompoundTag).getUUID("uuid")
+                val referenceExists = tag.getBoolean("referenceExists")
+                if (referenceExists) {
+                    return Component.literal(uuid.toString()).withStyle(ChatFormatting.DARK_GREEN)
                 }
-                return result
+                return Component.literal("No Structure").withStyle(ChatFormatting.DARK_GREEN)
             }
+
+            override fun color() = 0x118840
         }
     }
 }
