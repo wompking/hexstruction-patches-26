@@ -35,7 +35,7 @@ class OpLoadStructure : ConstMediaAction {
         val uuid = (args[1] as StructureIota).uuid
         val structureNBT = StructureManager.GetStructure(env.world, uuid)
         if (structureNBT == null) {
-            throw MishapInvalidIota(args[1] as StructureIota, 0, Component.literal("an associated structure"))
+            throw MishapInvalidIota(args[1] as StructureIota, 0, Component.literal("a linked structure"))
         }
 
         val structure = StructureTemplate()
@@ -55,6 +55,7 @@ class OpLoadStructure : ConstMediaAction {
         return listOf()
     }
 
+    //todo: refactor out into Utils
     fun checkAmbitFromBoundingBox(bb: BoundingBox, env: CastingEnvironment): Pair<Boolean, Vec3> {
         for (i in listOf(bb.minX(), bb.maxX()))
             for (j in listOf(bb.minY(), bb.maxY()))

@@ -56,7 +56,7 @@ class OpSaveStructure : ConstMediaAction {
                         pos,
                         env.world.getBlockState(pos),
                         env.castingEntity as? ServerPlayer
-                    ))
+                    ) || blockState.`is`(Blocks.BUDDING_AMETHYST))
                         throw MishapBadBlock(blockPos, Component.literal("breakable block"))
                 }
             }

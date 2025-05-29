@@ -35,6 +35,7 @@ public final class StructureManager extends SavedData {
     public static UUID SaveStructure(Level world, CompoundTag structureNBT) {
         StructureManager structureManager = GetServerManager(world.getServer());
         UUID uuid = UUID.randomUUID();
+
         structureManager.structureRegistry.put(uuid, structureNBT);
         structureManager.setDirty();
         return uuid;
