@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.utils.asInt
+import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -23,6 +24,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.level.block.Block
@@ -35,7 +37,8 @@ import org.agent.hexstruction.Utils
 import org.agent.hexstruction.patterns.OpSaveStructure.Spell
 import java.util.UUID
 
-// todo: claim integration
+// todo: claim integration (maybe done?)
+// todo: figure out how to manipulate transformations (probably store StructurePlaceSettings in StructureIota)
 class OpLoadStructure : SpellAction {
     override val argc = 2
 
@@ -71,6 +74,12 @@ class OpLoadStructure : SpellAction {
             val worldState = env.world.getBlockState(pos)
             if (!worldState.canBeReplaced(placeContext))
                 throw MishapBadBlock(pos, Component.literal("replaceable"))
+            !IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                env.world,
+                pos,
+                ItemStack.EMPTY,
+                env.castingEntity as? ServerPlayer
+            )
         }
 
 
