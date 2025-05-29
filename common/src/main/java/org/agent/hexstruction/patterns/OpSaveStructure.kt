@@ -25,6 +25,7 @@ import org.agent.hexstruction.Utils
 
 // todo: adjust cost based on targeted blocks
 // todo: claim integration (maybe done?)
+// todo: make blacklisting a tag
 class OpSaveStructure : ConstMediaAction {
     override val argc = 2
     override val mediaCost = MediaConstants.CRYSTAL_UNIT

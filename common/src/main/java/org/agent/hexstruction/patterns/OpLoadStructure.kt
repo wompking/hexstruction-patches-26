@@ -4,16 +4,23 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.asInt
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
 import net.minecraft.core.registries.Registries
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
@@ -24,7 +31,6 @@ import org.agent.hexstruction.Utils
 import java.util.UUID
 
 // todo: adjust cost based on targeted blocks
-// todo: placement overlap checks, mishap on overlap instead of consuming the structure and deleting parts of the world
 // todo: claim integration
 class OpLoadStructure : ConstMediaAction {
     override val argc = 2
@@ -47,6 +53,20 @@ class OpLoadStructure : ConstMediaAction {
         val result = checkAmbitFromBoundingBox(bb, env)
         if (!result.first)
             throw MishapBadLocation(result.second)
+
+        val blocks = structureNBT.getList("blocks", 10)
+        for (tag in blocks) {
+            val blockInts = (tag as CompoundTag).get("pos") as ListTag
+            val x = blockInts[0].asInt + origin.x
+            val y = blockInts[1].asInt + origin.y
+            val z = blockInts[2].asInt + origin.z
+
+            val pos = BlockPos(x, y, z)
+            val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+            val worldState = env.world.getBlockState(pos)
+            if (!worldState.canBeReplaced(placeContext))
+                throw MishapBadBlock(pos, Component.literal("replaceable"))
+        }
 
         structure.placeInWorld(env.world, origin, origin, settings, env.world.random, Block.UPDATE_CLIENTS)
 
