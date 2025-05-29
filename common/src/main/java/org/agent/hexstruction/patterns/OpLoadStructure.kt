@@ -15,6 +15,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
@@ -22,6 +23,9 @@ import org.agent.hexstruction.Utils
 import java.util.UUID
 
 // todo: adjust cost based on targeted blocks
+// todo: placement overlap checks, mishap on overlap instead of consuming the structure and deleting parts of the world
+// todo: claim integration
+// todo: ambit
 class OpLoadStructure : ConstMediaAction {
     override val argc = 2
     override val mediaCost = MediaConstants.CRYSTAL_UNIT
