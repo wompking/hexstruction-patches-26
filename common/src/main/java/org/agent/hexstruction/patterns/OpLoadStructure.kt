@@ -74,12 +74,13 @@ class OpLoadStructure : SpellAction {
             val worldState = env.world.getBlockState(pos)
             if (!worldState.canBeReplaced(placeContext))
                 throw MishapBadBlock(pos, Component.literal("replaceable"))
-            !IXplatAbstractions.INSTANCE.isPlacingAllowed(
+            if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(
                 env.world,
                 pos,
                 ItemStack.EMPTY,
                 env.castingEntity as? ServerPlayer
-            )
+            ))
+                throw MishapBadBlock(pos, Component.literal("permission to place"))
         }
 
 
