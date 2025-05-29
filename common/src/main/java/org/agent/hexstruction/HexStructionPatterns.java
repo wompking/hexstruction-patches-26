@@ -12,6 +12,8 @@ import org.agent.hexstruction.patterns.OpSaveStructure;
 // todo: make actual patterns
 // todo: Transformations
 // todo: Using as a template
+// valid mirrors: NONE, LEFT_RIGHT, FRONT_BACK
+// valid rotations: NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90
 public final class HexStructionPatterns {
     public static void Init() {
         Register("save_structure", "dqeqdwdqeqd", HexDir.WEST, new OpSaveStructure());

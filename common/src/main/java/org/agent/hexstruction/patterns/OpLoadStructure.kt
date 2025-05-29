@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.phys.Vec3
@@ -38,13 +39,13 @@ import org.agent.hexstruction.patterns.OpSaveStructure.Spell
 import java.util.UUID
 
 // todo: claim integration (maybe done?)
-// todo: figure out how to manipulate transformations (probably store StructurePlaceSettings in StructureIota)
 class OpLoadStructure : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val origin = Utils.GetBlockPos((args[0] as Vec3Iota).vec3)
-        val uuid = (args[1] as StructureIota).uuid
+        val structureIota = args[1] as StructureIota
+        val uuid = structureIota.uuid
         val structureNBT = StructureManager.GetStructure(env.world, uuid)
         if (structureNBT == null) {
             throw MishapInvalidIota(args[1] as StructureIota, 0, Component.literal("a linked structure"))
@@ -53,7 +54,7 @@ class OpLoadStructure : SpellAction {
         val structure = StructureTemplate()
         structure.load(env.world.holderLookup(Registries.BLOCK), structureNBT)
 
-        val settings = StructurePlaceSettings()
+        val settings = structureIota.settings
 
         val bb = structure.getBoundingBox(settings, origin)
         val result = checkAmbitFromBoundingBox(bb, env)

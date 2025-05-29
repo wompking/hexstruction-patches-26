@@ -22,6 +22,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
@@ -94,7 +95,7 @@ class OpSaveStructure : SpellAction {
         override fun cast(env: CastingEnvironment, image: CastingImage): CastingImage? {
             cast(env)
             val stack = image.stack.toMutableList()
-            stack.add(StructureIota(uuid!!, env.world))
+            stack.add(StructureIota(uuid!!, StructurePlaceSettings(), env.world))
 
             val image2 = image.copy(stack = stack)
 
