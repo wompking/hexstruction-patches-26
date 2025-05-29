@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.world.level.block.Blocks;
@@ -25,7 +26,6 @@ import java.util.UUID
 // todo: adjust cost based on targeted blocks
 // todo: placement overlap checks, mishap on overlap instead of consuming the structure and deleting parts of the world
 // todo: claim integration
-// todo: ambit
 class OpLoadStructure : ConstMediaAction {
     override val argc = 2
     override val mediaCost = MediaConstants.CRYSTAL_UNIT
@@ -43,10 +43,27 @@ class OpLoadStructure : ConstMediaAction {
 
         val settings = StructurePlaceSettings()
 
+        val bb = structure.getBoundingBox(settings, origin)
+        val result = checkAmbitFromBoundingBox(bb, env)
+        if (!result.first)
+            throw MishapBadLocation(result.second)
+
         structure.placeInWorld(env.world, origin, origin, settings, env.world.random, Block.UPDATE_CLIENTS)
 
         StructureManager.RemoveStructure(env.world, uuid)
 
         return listOf()
+    }
+
+    fun checkAmbitFromBoundingBox(bb: BoundingBox, env: CastingEnvironment): Pair<Boolean, Vec3> {
+        for (i in listOf(bb.minX(), bb.maxX()))
+            for (j in listOf(bb.minY(), bb.maxY()))
+                for (k in listOf(bb.minZ(), bb.maxZ()))
+                {
+                    val pos = Vec3(i.toDouble(), j.toDouble(), k.toDouble())
+                    if (!env.isVecInAmbit(pos))
+                        return Pair(false, pos)
+                }
+        return Pair(true, Vec3.ZERO)
     }
 }
