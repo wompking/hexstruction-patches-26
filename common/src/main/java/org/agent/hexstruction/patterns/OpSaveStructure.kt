@@ -31,6 +31,8 @@ import java.util.UUID
 
 // todo: claim integration (maybe done?)
 // todo: make blacklisting a tag
+// origin of structures is lower north-west
+// origin shifts with transformations
 class OpSaveStructure : SpellAction {
     override val argc = 2
 

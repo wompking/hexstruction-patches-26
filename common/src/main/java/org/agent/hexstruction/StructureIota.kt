@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import java.util.UUID
 
-// todo: figure out how to represent the data (display)
 class StructureIota(structureUUID: UUID, val settings: StructurePlaceSettings, val world: Level) : Iota(TYPE, structureUUID) {
     override fun isTruthy() = true
     override fun toleratesOther(that: Iota) = typesMatch(this, that) && this.payload == (that as StructureIota).payload
@@ -53,8 +52,8 @@ class StructureIota(structureUUID: UUID, val settings: StructurePlaceSettings, v
 
                 val settingsTag = tag.getCompound("settings")
                 val settings = StructurePlaceSettings()
-                settings.setMirror(Mirror.valueOf(settingsTag.getString("mirror")))
-                settings.setRotation(Rotation.valueOf(settingsTag.getString("rotation")))
+                settings.mirror = Mirror.valueOf(settingsTag.getString("mirror"))
+                settings.rotation = Rotation.valueOf(settingsTag.getString("rotation"))
 
                 return StructureIota(uuid, settings, world)
             }
@@ -63,7 +62,10 @@ class StructureIota(structureUUID: UUID, val settings: StructurePlaceSettings, v
                 val uuid = (tag as CompoundTag).getUUID("uuid")
                 val referenceExists = tag.getBoolean("referenceExists")
                 if (referenceExists) {
-                    return Component.literal(uuid.toString()).withStyle(ChatFormatting.DARK_GREEN)
+                    val settingsTag = tag.getCompound("settings")
+                    val mirror = settingsTag.getString("mirror")
+                    val rotation = settingsTag.getString("rotation")
+                    return Component.literal("Structure ${uuid.toString().substring(0, 8)} [MIRROR=$mirror, ROTATION=$rotation]").withStyle(ChatFormatting.DARK_GREEN)
                 }
                 return Component.literal("No Structure").withStyle(ChatFormatting.DARK_GREEN)
             }

@@ -6,18 +6,17 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.hex.HexActions;
 import net.minecraft.core.Registry;
-import org.agent.hexstruction.patterns.OpLoadStructure;
-import org.agent.hexstruction.patterns.OpSaveStructure;
+import org.agent.hexstruction.patterns.*;
 
-// todo: make actual patterns
-// todo: Transformations
 // todo: Using as a template
-// valid mirrors: NONE, LEFT_RIGHT, FRONT_BACK
-// valid rotations: NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90
 public final class HexStructionPatterns {
     public static void Init() {
         Register("save_structure", "dqeqdwdqeqd", HexDir.WEST, new OpSaveStructure());
         Register("load_structure", "aeqeawaeqea", HexDir.EAST, new OpLoadStructure());
+        Register("mirror_left_right", "aeqeawaeqeaaewq", HexDir.EAST, new OpMirrorLeftRight());
+        Register("mirror_front_back", "aeqeawaeqeaqqwe", HexDir.EAST, new OpMirrorFrontBack());
+        Register("rotate_clockwise", "aeqeawaeqeaaede", HexDir.EAST, new OpRotateClockwise());
+        Register("rotate_counterclockwise", "aeqeawaeqeaqqaq", HexDir.EAST, new OpRotateCounterClockwise());
     }
 
     private static void Register(String name, String signature, HexDir startDir, Action action) {
