@@ -1,7 +1,11 @@
 package org.agent.hexstruction.patterns
 
+import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
+import at.petrak.hexcasting.api.casting.castables.SpellAction
+import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
@@ -22,15 +26,14 @@ import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
+import java.util.UUID
 
-// todo: adjust cost based on targeted blocks
 // todo: claim integration (maybe done?)
 // todo: make blacklisting a tag
-class OpSaveStructure : ConstMediaAction {
+class OpSaveStructure : SpellAction {
     override val argc = 2
-    override val mediaCost = MediaConstants.CRYSTAL_UNIT
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val LSW_bound = Utils.GetVec3i((args[0] as Vec3Iota).vec3)
         val UNE_bound = Utils.GetVec3i((args[1] as Vec3Iota).vec3)
 
@@ -40,12 +43,7 @@ class OpSaveStructure : ConstMediaAction {
         if (!result.first)
             throw MishapBadLocation(result.second)
 
-        val origin = BlockPos(bb.minX(), bb.minY(), bb.minZ())
-        val bounds = BlockPos(bb.xSpan, bb.ySpan, bb.zSpan)
-
-        val structure = StructureTemplate()
-
-        var blockPos = BlockPos(0, 0, 0)
+        var blockPos: BlockPos
         for (i in bb.minX()..bb.maxX()) {
             for (j in bb.minY()..bb.maxY()) {
                 for (k in bb.minZ()..bb.maxZ()) {
@@ -63,22 +61,45 @@ class OpSaveStructure : ConstMediaAction {
             }
         }
 
+        return SpellAction.Result(
+            Spell(bb, this.argc),
+            (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 8,
+            listOf(ParticleSpray.burst(Vec3(bb.center.x.toDouble(), bb.center.y.toDouble(), bb.center.z.toDouble()), 1.0))
+        )
+    }
 
-        structure.fillFromWorld(env.world, origin, bounds, false, Blocks.AIR)
-        for (i in bb.minX()..bb.maxX()) {
-            for (j in bb.minY()..bb.maxY()) {
-                for (k in bb.minZ()..bb.maxZ()) {
-                    val pos = BlockPos(i, j, k)
-                    val blockState = env.world.getBlockState(pos)
-                    if (!blockState.isAir /*&& !blockState.`is`(Blocks.BEDROCK)*/)
-                        env.world.removeBlock(pos, false)
+    private data class Spell(val bb: BoundingBox, val argc: Int) : RenderedSpell {
+        var uuid: UUID? = null
+
+        override fun cast(env: CastingEnvironment) {
+            val origin = BlockPos(bb.minX(), bb.minY(), bb.minZ())
+            val bounds = BlockPos(bb.xSpan, bb.ySpan, bb.zSpan)
+
+            val structure = StructureTemplate()
+
+            structure.fillFromWorld(env.world, origin, bounds, false, Blocks.AIR)
+            for (i in bb.minX()..bb.maxX()) {
+                for (j in bb.minY()..bb.maxY()) {
+                    for (k in bb.minZ()..bb.maxZ()) {
+                        val pos = BlockPos(i, j, k)
+                        val blockState = env.world.getBlockState(pos)
+                        if (!blockState.isAir /*&& !blockState.`is`(Blocks.BEDROCK)*/)
+                            env.world.removeBlock(pos, false)
+                    }
                 }
             }
+            this.uuid = StructureManager.SaveStructure(env.world, structure)
         }
 
-        val uuid = StructureManager.SaveStructure(env.world, structure)
+        override fun cast(env: CastingEnvironment, image: CastingImage): CastingImage? {
+            cast(env)
+            val stack = image.stack.toMutableList()
+            stack.add(StructureIota(uuid!!, env.world))
 
-        return listOf(StructureIota(uuid, env.world))
+            val image2 = image.copy(stack = stack)
+
+            return image2
+        }
     }
 
     fun checkAmbitFromBoundingBox(bb: BoundingBox, env: CastingEnvironment): Pair<Boolean, Vec3> {
