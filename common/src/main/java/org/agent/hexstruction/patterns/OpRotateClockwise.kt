@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import net.minecraft.world.level.block.Rotation
 import org.agent.hexstruction.StructureIota
 
+// todo: invalid iota type checks
 class OpRotateClockwise : ConstMediaAction {
     override val argc = 1
 

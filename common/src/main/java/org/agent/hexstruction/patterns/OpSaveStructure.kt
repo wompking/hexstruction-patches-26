@@ -31,6 +31,7 @@ import java.util.UUID
 
 // todo: claim integration (maybe done?)
 // todo: make blacklisting a tag
+// todo: invalid iota type checks
 // origin of structures is lower north-west
 // origin shifts with transformations
 class OpSaveStructure : SpellAction {
@@ -42,7 +43,7 @@ class OpSaveStructure : SpellAction {
 
         val bb = BoundingBox.fromCorners(LSW_bound, UNE_bound)
 
-        val result = checkAmbitFromBoundingBox(bb, env)
+        val result = Utils.CheckAmbitFromBoundingBox(bb, env)
         if (!result.first)
             throw MishapBadLocation(result.second)
 
@@ -103,17 +104,5 @@ class OpSaveStructure : SpellAction {
 
             return image2
         }
-    }
-
-    fun checkAmbitFromBoundingBox(bb: BoundingBox, env: CastingEnvironment): Pair<Boolean, Vec3> {
-        for (i in listOf(bb.minX(), bb.maxX()))
-            for (j in listOf(bb.minY(), bb.maxY()))
-                for (k in listOf(bb.minZ(), bb.maxZ()))
-                {
-                    val pos = Vec3(i.toDouble(), j.toDouble(), k.toDouble())
-                    if (!env.isVecInAmbit(pos))
-                        return Pair(false, pos)
-                }
-        return Pair(true, Vec3.ZERO)
     }
 }

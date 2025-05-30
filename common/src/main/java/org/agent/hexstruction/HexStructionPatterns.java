@@ -17,6 +17,7 @@ public final class HexStructionPatterns {
         Register("mirror_front_back", "aeqeawaeqeaqqwe", HexDir.EAST, new OpMirrorFrontBack());
         Register("rotate_clockwise", "aeqeawaeqeaaede", HexDir.EAST, new OpRotateClockwise());
         Register("rotate_counterclockwise", "aeqeawaeqeaqqaq", HexDir.EAST, new OpRotateCounterClockwise());
+        Register("display_structure", "aeqeawaeqeaqed", HexDir.EAST, new OpDisplayStructure());
     }
 
     private static void Register(String name, String signature, HexDir startDir, Action action) {

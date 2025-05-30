@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "BlockDisplayInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

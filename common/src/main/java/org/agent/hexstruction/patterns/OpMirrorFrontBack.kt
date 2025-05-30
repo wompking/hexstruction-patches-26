@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.block.Rotation
 import org.agent.hexstruction.StructureIota
 
+// todo: invalid iota type checks
 class OpMirrorFrontBack: ConstMediaAction {
     override val argc = 1
 
