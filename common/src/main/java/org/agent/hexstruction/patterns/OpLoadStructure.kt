@@ -2,10 +2,8 @@ package org.agent.hexstruction.patterns
 
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
@@ -14,12 +12,9 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.utils.asInt
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.Vec3i
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
@@ -28,14 +23,11 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
-import org.agent.hexstruction.patterns.OpSaveStructure.Spell
 import java.util.UUID
 
 // todo: claim integration (maybe done?)
@@ -64,7 +56,7 @@ class OpLoadStructure : SpellAction {
         if (!result.first)
             throw MishapBadLocation(result.second)
 
-        var particles = mutableListOf<ParticleSpray>()
+        val particles = mutableListOf<ParticleSpray>()
         val blocks = structureNBT.getList("blocks", 10)
         for (tag in blocks) {
             val blockInts = (tag as CompoundTag).get("pos") as ListTag
