@@ -72,7 +72,6 @@ class OpDisplayStructure : SpellAction {
     }
 
     private data class Spell(val structure: StructureTemplate, val settings: StructurePlaceSettings, val origin: BlockPos, val structureNBT: CompoundTag, val lifeTime: Double) : RenderedSpell {
-        // todo: then map them to the palette tag using the state to get the blocks, and finally render
         override fun cast(env: CastingEnvironment) {
             val newOrigin = structure.getZeroPositionWithTransform(origin, settings.mirror, settings.rotation)
 
@@ -86,8 +85,8 @@ class OpDisplayStructure : SpellAction {
 
                 when (settings.mirror) {
                     Mirror.NONE -> null
-                    Mirror.LEFT_RIGHT -> x *= -1
-                    Mirror.FRONT_BACK -> z *= -1
+                    Mirror.LEFT_RIGHT -> z *= -1
+                    Mirror.FRONT_BACK -> x *= -1
                 }
 
                 val pos = BlockPos(x, y, z).rotate(settings.rotation).offset(newOrigin.x, newOrigin.y, newOrigin.z)

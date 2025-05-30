@@ -44,7 +44,7 @@ class OpLoadStructure : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val origin = Utils.GetBlockPos((args[0] as Vec3Iota).vec3)
+        var origin = Utils.GetBlockPos((args[0] as Vec3Iota).vec3)
         val structureIota = args[1] as StructureIota
         val uuid = structureIota.uuid
         val structureNBT = StructureManager.GetStructure(env.world, uuid)
@@ -56,6 +56,8 @@ class OpLoadStructure : SpellAction {
         structure.load(env.world.holderLookup(Registries.BLOCK), structureNBT)
 
         val settings = structureIota.settings
+
+        origin = structure.getZeroPositionWithTransform(origin, settings.mirror, settings.rotation)
 
         val bb = structure.getBoundingBox(settings, origin)
         val result = Utils.CheckAmbitFromBoundingBox(bb, env)
