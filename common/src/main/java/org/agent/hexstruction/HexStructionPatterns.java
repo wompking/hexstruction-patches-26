@@ -8,7 +8,6 @@ import at.petrak.hexcasting.common.lib.hex.HexActions;
 import net.minecraft.core.Registry;
 import org.agent.hexstruction.patterns.*;
 
-// todo: Using as a template
 public final class HexStructionPatterns {
     public static void Init() {
         Register("save_structure", "dqeqdwdqeqd", HexDir.WEST, new OpSaveStructure());

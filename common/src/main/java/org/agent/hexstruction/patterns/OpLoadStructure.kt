@@ -4,11 +4,10 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.Vec3Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
-import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.utils.asInt
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -25,29 +24,26 @@ import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.phys.Vec3
-import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
+import org.agent.hexstruction.getStructureNBT
+import org.agent.hexstruction.getStructureSettings
+import org.agent.hexstruction.getStructureUUID
 import java.util.UUID
 
 // todo: claim integration (maybe done?)
-// todo: invalid iota type checks
 class OpLoadStructure : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        var origin = Utils.GetBlockPos((args[0] as Vec3Iota).vec3)
-        val structureIota = args[1] as StructureIota
-        val uuid = structureIota.uuid
-        val structureNBT = StructureManager.GetStructure(env.world, uuid)
-        if (structureNBT == null) {
-            throw MishapInvalidIota(args[1] as StructureIota, 0, Component.literal("a linked structure"))
-        }
+        var origin = args.getBlockPos(0, argc)
+
+        val structureNBT = args.getStructureNBT(1, argc, env.world)
+        val settings = args.getStructureSettings(1, argc)
+        val uuid = args.getStructureUUID(1, argc)
 
         val structure = StructureTemplate()
         structure.load(env.world.holderLookup(Registries.BLOCK), structureNBT)
-
-        val settings = structureIota.settings
 
         origin = structure.getZeroPositionWithTransform(origin, settings.mirror, settings.rotation)
 

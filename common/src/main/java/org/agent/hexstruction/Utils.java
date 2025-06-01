@@ -2,7 +2,6 @@ package org.agent.hexstruction;
 
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import kotlin.Pair;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
@@ -22,10 +21,6 @@ public final class Utils {
             z--;
 
         return new Vec3i(x,y,z);
-    }
-
-    public static BlockPos GetBlockPos(Vec3 vector) {
-        return new BlockPos(GetVec3i(vector));
     }
 
     public static Pair<Boolean, Vec3> CheckAmbitFromBoundingBox(BoundingBox bb, CastingEnvironment env) {

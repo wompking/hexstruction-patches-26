@@ -4,60 +4,41 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.iota.DoubleIota
+import at.petrak.hexcasting.api.casting.getBlockPos
+import at.petrak.hexcasting.api.casting.getDoubleBetween
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.Vec3Iota
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
-import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.utils.asCompound
 import at.petrak.hexcasting.api.utils.asInt
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.Display
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.level.block.Mirror
-import net.minecraft.world.level.block.Rotation
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
 import net.minecraft.world.phys.Vec3
-import org.agent.hexstruction.StructureIota
-import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
+import org.agent.hexstruction.getStructureNBT
+import org.agent.hexstruction.getStructureSettings
 import org.agent.hexstruction.misc.TimedBlockDisplay
 import org.agent.hexstruction.mixin.BlockDisplayInvoker
-import org.agent.hexstruction.patterns.OpLoadStructure.Spell
 
-// todo: limit lifetime to 1 hour (72000 ticks)
-// todo: invalid iota type checks
 class OpDisplayStructure : SpellAction {
     override val argc = 3
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val origin = Utils.GetBlockPos((args[0] as Vec3Iota).vec3)
-        val structureIota = args[1] as StructureIota
-        val uuid = structureIota.uuid
-        val structureNBT = StructureManager.GetStructure(env.world, uuid)
-        if (structureNBT == null) {
-            throw MishapInvalidIota(args[1] as StructureIota, 0, Component.literal("a linked structure"))
-        }
+        val origin = args.getBlockPos(0, argc)
+
+        val structureNBT = args.getStructureNBT(1, argc, env.world)
+        val settings = args.getStructureSettings(1, argc)
 
         val structure = StructureTemplate()
         structure.load(env.world.holderLookup(Registries.BLOCK), structureNBT)
-
-        val settings = structureIota.settings
 
         val bb = structure.getBoundingBox(settings, origin)
         val result = Utils.CheckAmbitFromBoundingBox(bb, env)
@@ -65,7 +46,7 @@ class OpDisplayStructure : SpellAction {
             throw MishapBadLocation(result.second)
 
         return SpellAction.Result(
-            Spell(structure, settings, origin, structureNBT, (args[2] as DoubleIota).double),
+            Spell(structure, settings, origin, structureNBT, (args.getDoubleBetween(2, 0.0, 72000.0, argc))),
             (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 100,
             listOf(ParticleSpray.burst(Vec3(bb.center.x.toDouble(), bb.center.y.toDouble(), bb.center.z.toDouble()), 1.0))
         )

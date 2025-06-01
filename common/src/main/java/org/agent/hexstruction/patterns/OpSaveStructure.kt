@@ -1,13 +1,12 @@
 package org.agent.hexstruction.patterns
 
 import at.petrak.hexcasting.api.casting.ParticleSpray
-import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
+import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.Vec3Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.misc.MediaConstants
@@ -16,12 +15,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
@@ -31,15 +26,13 @@ import java.util.UUID
 
 // todo: claim integration (maybe done?)
 // todo: make blacklisting a tag
-// todo: invalid iota type checks
 // origin of structures is lower north-west
-// origin shifts with transformations
 class OpSaveStructure : SpellAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val LSW_bound = Utils.GetVec3i((args[0] as Vec3Iota).vec3)
-        val UNE_bound = Utils.GetVec3i((args[1] as Vec3Iota).vec3)
+        val LSW_bound = Utils.GetVec3i((args.getVec3(0, argc)))
+        val UNE_bound = Utils.GetVec3i((args.getVec3(1, argc)))
 
         val bb = BoundingBox.fromCorners(LSW_bound, UNE_bound)
 

@@ -5,14 +5,13 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.block.Rotation
-import org.agent.hexstruction.StructureIota
+import org.agent.hexstruction.getStructureIota
 
-// todo: invalid iota type checks
 class OpMirrorFrontBack: ConstMediaAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val structureIota = args[0] as StructureIota
+        val structureIota = args.getStructureIota(0, argc)
         when (structureIota.settings.mirror) {
             Mirror.NONE -> structureIota.settings.mirror = Mirror.FRONT_BACK
             Mirror.FRONT_BACK -> structureIota.settings.mirror = Mirror.NONE
