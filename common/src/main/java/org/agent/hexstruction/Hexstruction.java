@@ -6,6 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraft.resources.ResourceLocation;
 
+// todo: lang file
+// todo: patchouli generation
+// todo: docs generation
+// todo: finish filling out things to make things work (like an icon)
+// todo: data generation (forge and fabric)
+// todo: configure forge gradle
 public final class Hexstruction {
     public static final String MOD_ID = "hexstruction";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
