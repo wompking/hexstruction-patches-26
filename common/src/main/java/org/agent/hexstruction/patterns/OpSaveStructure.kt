@@ -22,10 +22,10 @@ import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
+import org.agent.hexstruction.tags.HexstructionBlockTags
 import java.util.UUID
 
 // todo: claim integration (maybe done?)
-// todo: make blacklisting a tag
 // origin of structures is lower north-west
 class OpSaveStructure : SpellAction {
     override val argc = 2
@@ -47,13 +47,16 @@ class OpSaveStructure : SpellAction {
                     val pos = BlockPos(i, j, k)
                     blockPos = pos
                     val blockState = env.world.getBlockState(pos)
-                    if (blockState.block.defaultDestroyTime() == -1f || !IXplatAbstractions.INSTANCE.isBreakingAllowed(
+                    if (blockState.block.defaultDestroyTime() == -1f || blockState.getDestroySpeed(env.world, pos) < 0f
+                        || !IXplatAbstractions.INSTANCE.isBreakingAllowed(
                         env.world,
                         pos,
                         env.world.getBlockState(pos),
                         env.castingEntity as? ServerPlayer
-                    ) || blockState.`is`(Blocks.BUDDING_AMETHYST))
+                    ))
                         throw MishapBadBlock(blockPos, Component.literal("breakable block"))
+                    if (blockState.`is`(HexstructionBlockTags.STRUCTURE_SAVE_BANNED))
+                        throw MishapBadBlock(blockPos, Component.literal("non-budding block"))
                 }
             }
         }

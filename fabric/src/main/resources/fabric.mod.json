@@ -19,6 +19,9 @@
     ],
     "client": [
       "org.agent.hexstruction.fabric.client.HexstructionFabricClient"
+    ],
+    "fabric-datagen": [
+      "org.agent.hexstruction.fabric.client.datagen.DataGenerator"
     ]
   },
   "mixins": [

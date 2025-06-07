@@ -1,0 +1,37 @@
+{
+  "name": "hexstruction.page.structure_spells.title",
+  "icon": "minecraft:structure_block",
+  "category": "hexcasting:patterns/spells",
+  "sortnum": 30,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexstruction:save_structure",
+      "anchor": "hexstruction:save_structure",
+      "input": "vec, vec",
+      "output": "structure",
+      "text": "hexstruction.page.save_structure.summary"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexstruction:load_structure",
+      "anchor": "hexstruction:load_structure",
+      "input": "vec, structure",
+      "output": "",
+      "text": "hexstruction.page.load_structure.summary"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexstruction:display_structure",
+      "anchor": "hexstruction:display_structure",
+      "input": "vec, structure, num",
+      "output": "",
+      "text": "hexstruction.page.display_structure.summary.0"
+    },
+    {
+      "type": "patchouli:text",
+      "text":"hexstruction.page.display_structure.summary.1"
+    }
+  ]
+}
