@@ -6,8 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraft.resources.ResourceLocation;
 
-// todo: docs generation
-// todo: finish filling out things to make things work (like an icon)
 // todo: configure forge gradle
 public final class Hexstruction {
     public static final String MOD_ID = "hexstruction";
