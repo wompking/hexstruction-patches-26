@@ -54,9 +54,9 @@ class OpSaveStructure : SpellAction {
                         env.world.getBlockState(pos),
                         env.castingEntity as? ServerPlayer
                     ))
-                        throw MishapBadBlock(blockPos, Component.literal("breakable block"))
+                        throw MishapBadBlock.of(blockPos, "breakable block")
                     if (blockState.`is`(HexstructionBlockTags.STRUCTURE_SAVE_BANNED))
-                        throw MishapBadBlock(blockPos, Component.literal("non-budding block"))
+                        throw MishapBadBlock.of(blockPos, "non-budding block")
                 }
             }
         }
