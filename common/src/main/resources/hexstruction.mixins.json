@@ -6,7 +6,9 @@
   "client": [
   ],
   "mixins": [
-    "BlockDisplayInvoker"
+    "BlockDisplayInvoker",
+    "PaletteAccessor",
+    "StructureTemplateAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

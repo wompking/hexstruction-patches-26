@@ -44,6 +44,22 @@
       "input": "structure",
       "output": "structure",
       "text": "hexstruction.page.rotate_counterclockwise.summary"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexstruction:bounding_box",
+      "anchor": "hexstruction:bounding_box",
+      "input": "structure",
+      "output": "[number]",
+      "text": "hexstruction.page.bounding_box.summary"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexstruction:transformations",
+      "anchor": "hexstruction:transformations",
+      "input": "structure",
+      "output": "[number]",
+      "text": "hexstruction.page.transformations.summary"
     }
   ]
 }

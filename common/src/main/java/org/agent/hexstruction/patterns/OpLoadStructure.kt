@@ -14,10 +14,10 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Vec3i
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
@@ -59,26 +59,25 @@ class OpLoadStructure : SpellAction {
             val x = blockInts[0].asInt + origin.x
             val y = blockInts[1].asInt + origin.y
             val z = blockInts[2].asInt + origin.z
-            particles.add(ParticleSpray.burst(Vec3(x.toDouble(), y.toDouble(), z.toDouble()), 1.0))
+            particles.add(ParticleSpray.burst(Vec3.atCenterOf(Vec3i(x, y, z)), 1.0))
 
             val pos = BlockPos(x, y, z)
             val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
             val worldState = env.world.getBlockState(pos)
             if (!worldState.canBeReplaced(placeContext))
-                throw MishapBadBlock(pos, Component.literal("replaceable"))
+                throw MishapBadBlock.of(pos, "replaceable")
             if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(
                 env.world,
                 pos,
                 ItemStack.EMPTY,
                 env.castingEntity as? ServerPlayer
             ))
-                throw MishapBadBlock(pos, Component.literal("permission to place"))
+                throw MishapBadBlock.of(pos, "permission to place")
         }
-
 
         return SpellAction.Result(
             Spell(structure, settings, origin, uuid),
-            (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 8,
+            Utils.GetBlockCount(structureNBT) * (MediaConstants.DUST_UNIT / 8),
             particles
         )
     }
