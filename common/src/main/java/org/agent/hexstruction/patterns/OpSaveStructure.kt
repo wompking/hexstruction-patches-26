@@ -83,7 +83,9 @@ class OpSaveStructure : SpellAction {
                     for (k in bb.minZ()..bb.maxZ()) {
                         val pos = BlockPos(i, j, k)
                         val blockState = env.world.getBlockState(pos)
-                        if (!blockState.isAir /*&& !blockState.`is`(Blocks.BEDROCK)*/)
+                        if (blockState.hasBlockEntity())
+                            env.world.removeBlockEntity(pos)
+                        if (!blockState.isAir)
                             env.world.removeBlock(pos, false)
                     }
                 }
