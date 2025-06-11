@@ -7,15 +7,11 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
@@ -26,7 +22,6 @@ import org.agent.hexstruction.Utils
 import org.agent.hexstruction.misc.FilterableStructureTemplate
 import org.agent.hexstruction.tags.HexstructionBlockTags
 import java.util.UUID
-import java.util.logging.Filter
 
 // todo: claim integration (maybe done?)
 // origin of structures is lower north-west
@@ -80,7 +75,6 @@ class OpSaveStructure : SpellAction {
             }
             this.uuid = StructureManager.SaveStructure(env.world, structure)
             costs[0] = Utils.GetBlockCount(StructureManager.GetStructure(env.world, uuid))
-            println(costs[0])
         }
 
         override fun cast(env: CastingEnvironment, image: CastingImage): CastingImage? {

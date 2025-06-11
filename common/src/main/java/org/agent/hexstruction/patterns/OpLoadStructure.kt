@@ -18,7 +18,6 @@ import net.minecraft.core.Vec3i
 import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
@@ -75,8 +74,6 @@ class OpLoadStructure : SpellAction {
             ))
                 throw MishapBadBlock.of(pos, "permission to place")
         }
-
-        println(Utils.GetBlockCount(structureNBT) * (MediaConstants.DUST_UNIT / 8))
 
         return SpellAction.Result(
             Spell(structure, settings, origin, uuid),

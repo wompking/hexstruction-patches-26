@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import java.util.UUID
 
 class StructureIota(structureUUID: UUID, val settings: StructurePlaceSettings, val world: Level) : Iota(TYPE, structureUUID) {
-    override fun isTruthy() = true
+    override fun isTruthy(): Boolean = StructureManager.CheckStructureSaved(world, uuid)
     override fun toleratesOther(that: Iota) = typesMatch(this, that) && this.payload == (that as StructureIota).payload
     val uuid = payload as UUID
 

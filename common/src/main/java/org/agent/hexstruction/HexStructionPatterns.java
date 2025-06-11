@@ -17,6 +17,8 @@ public final class HexStructionPatterns {
         Register("rotate_clockwise", "aeqeawaeqeaaede", HexDir.EAST, new OpRotateClockwise());
         Register("rotate_counterclockwise", "aeqeawaeqeaqqaq", HexDir.EAST, new OpRotateCounterClockwise());
         Register("display_structure", "aeqeawaeqeaqed", HexDir.EAST, new OpDisplayStructure());
+        Register("bounding_box", "aeqeawaeqeaqqeqaqeq", HexDir.EAST, new OpGetBoundingBox());
+        Register("transformations", "aeqeawaeqeaaee", HexDir.EAST, new OpGetTransformations());
     }
 
     private static void Register(String name, String signature, HexDir startDir, Action action) {
