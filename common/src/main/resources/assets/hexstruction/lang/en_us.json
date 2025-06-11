@@ -18,8 +18,8 @@
 
   "hexstruction.page.structure_spells.title": "Structures",
 
-  "hexstruction.page.save_structure.summary": "Removes the locations of two corners from the stack, then consumes a region of space defined by those two corners, storing the result in a Structure iota.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$ for every block consumed, including air.",
-  "hexstruction.page.load_structure.summary": "Removes the location of the structure's origin and a structure from the stack, then attempts to place the structure at the origin, erasing the structure from all memory. Mishaps if any part of the structure overlaps with another block.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$ for every block in the structure's bounding box.",
+  "hexstruction.page.save_structure.summary": "Removes the locations of two corners from the stack, then consumes a region of space defined by those two corners, storing the result in a Structure iota.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$ for every block consumed.",
+  "hexstruction.page.load_structure.summary": "Removes the location of the structure's origin and a structure from the stack, then attempts to place the structure at the origin, erasing the structure from all memory. Mishaps if any part of the structure overlaps with another block.$(br)Costs about an eighth of one $(l:items/amethyst)$(item)Amethyst Dust/$ for every block placed.",
   "hexstruction.page.display_structure.summary.0": "Removes the location of the structure's origin and a structure from the stack, followed by a duration between 0 and 72000.",
-  "hexstruction.page.display_structure.summary.1": "Displays a phantom structure at that location for the specified duration (in ticks). Does not erase the structure from memory.$(br)Costs about a hundredth of one $(l:items/amethyst)$(item)Amethyst Dust/$ for every block displayed within the structure's bounding box (including empty space)."
+  "hexstruction.page.display_structure.summary.1": "Displays a phantom structure at that location for the specified duration (in ticks). Does not erase the structure from memory.$(br)Costs about a hundredth of one $(l:items/amethyst)$(item)Amethyst Dust/$ for every block displayed."
 }

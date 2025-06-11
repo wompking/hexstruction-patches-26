@@ -47,7 +47,7 @@ class OpDisplayStructure : SpellAction {
 
         return SpellAction.Result(
             Spell(structure, settings, origin, structureNBT, (args.getDoubleBetween(2, 0.0, 72000.0, argc))),
-            (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 100,
+            Utils.GetBlockCount(structureNBT) * (MediaConstants.DUST_UNIT / 100),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(bb.center), 1.0))
         )
     }

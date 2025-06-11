@@ -76,10 +76,11 @@ class OpLoadStructure : SpellAction {
                 throw MishapBadBlock.of(pos, "permission to place")
         }
 
+        println(Utils.GetBlockCount(structureNBT) * (MediaConstants.DUST_UNIT / 8))
 
         return SpellAction.Result(
             Spell(structure, settings, origin, uuid),
-            (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 8,
+            Utils.GetBlockCount(structureNBT) * (MediaConstants.DUST_UNIT / 8),
             particles
         )
     }

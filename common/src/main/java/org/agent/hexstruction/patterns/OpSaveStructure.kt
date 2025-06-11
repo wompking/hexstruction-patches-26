@@ -43,14 +43,16 @@ class OpSaveStructure : SpellAction {
         if (!result.first)
             throw MishapBadLocation(result.second)
 
+        val costs = arrayOf(0)
+
         return SpellAction.Result(
-            Spell(bb, this.argc),
-            (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 8,
+            Spell(bb, this.argc, costs),
+            costs[0] * (MediaConstants.DUST_UNIT / 8),
             listOf(ParticleSpray.burst(Vec3.atCenterOf(bb.center), 1.0))
         )
     }
 
-    private data class Spell(val bb: BoundingBox, val argc: Int) : RenderedSpell {
+    private data class Spell(val bb: BoundingBox, val argc: Int, val costs: Array<Int>) : RenderedSpell {
         var uuid: UUID? = null
 
         override fun cast(env: CastingEnvironment) {
@@ -77,6 +79,8 @@ class OpSaveStructure : SpellAction {
                 }
             }
             this.uuid = StructureManager.SaveStructure(env.world, structure)
+            costs[0] = Utils.GetBlockCount(StructureManager.GetStructure(env.world, uuid))
+            println(costs[0])
         }
 
         override fun cast(env: CastingEnvironment, image: CastingImage): CastingImage? {
