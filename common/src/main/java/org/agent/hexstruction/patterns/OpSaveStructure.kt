@@ -64,7 +64,7 @@ class OpSaveStructure : SpellAction {
         return SpellAction.Result(
             Spell(bb, this.argc),
             (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 8,
-            listOf(ParticleSpray.burst(Vec3(bb.center.x.toDouble(), bb.center.y.toDouble(), bb.center.z.toDouble()), 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(bb.center), 1.0))
         )
     }
 
