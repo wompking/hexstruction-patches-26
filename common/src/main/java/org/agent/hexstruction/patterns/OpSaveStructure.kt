@@ -17,13 +17,16 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.phys.Vec3
 import org.agent.hexstruction.StructureIota
 import org.agent.hexstruction.StructureManager
 import org.agent.hexstruction.Utils
+import org.agent.hexstruction.misc.FilterableStructureTemplate
 import org.agent.hexstruction.tags.HexstructionBlockTags
 import java.util.UUID
+import java.util.logging.Filter
 
 // todo: claim integration (maybe done?)
 // origin of structures is lower north-west
@@ -40,27 +43,6 @@ class OpSaveStructure : SpellAction {
         if (!result.first)
             throw MishapBadLocation(result.second)
 
-        var blockPos: BlockPos
-        for (i in bb.minX()..bb.maxX()) {
-            for (j in bb.minY()..bb.maxY()) {
-                for (k in bb.minZ()..bb.maxZ()) {
-                    val pos = BlockPos(i, j, k)
-                    blockPos = pos
-                    val blockState = env.world.getBlockState(pos)
-                    if (blockState.block.defaultDestroyTime() == -1f || blockState.getDestroySpeed(env.world, pos) < 0f
-                        || !IXplatAbstractions.INSTANCE.isBreakingAllowed(
-                        env.world,
-                        pos,
-                        env.world.getBlockState(pos),
-                        env.castingEntity as? ServerPlayer
-                    ))
-                        throw MishapBadBlock.of(blockPos, "breakable block")
-                    if (blockState.`is`(HexstructionBlockTags.STRUCTURE_SAVE_BANNED))
-                        throw MishapBadBlock.of(blockPos, "non-budding block")
-                }
-            }
-        }
-
         return SpellAction.Result(
             Spell(bb, this.argc),
             (bb.xSpan * bb.ySpan * bb.zSpan * MediaConstants.DUST_UNIT) / 8,
@@ -75,18 +57,22 @@ class OpSaveStructure : SpellAction {
             val origin = BlockPos(bb.minX(), bb.minY(), bb.minZ())
             val bounds = BlockPos(bb.xSpan, bb.ySpan, bb.zSpan)
 
-            val structure = StructureTemplate()
+            val structure = FilterableStructureTemplate()
 
-            structure.fillFromWorld(env.world, origin, bounds, false, Blocks.AIR)
+            structure.fillFromWorld(env.world, origin, bounds, false) {
+                blockState, pos -> blockCheck(blockState, pos, env)
+            }
             for (i in bb.minX()..bb.maxX()) {
                 for (j in bb.minY()..bb.maxY()) {
                     for (k in bb.minZ()..bb.maxZ()) {
                         val pos = BlockPos(i, j, k)
                         val blockState = env.world.getBlockState(pos)
-                        if (blockState.hasBlockEntity())
-                            env.world.removeBlockEntity(pos)
-                        if (!blockState.isAir)
-                            env.world.removeBlock(pos, false)
+                        if (blockCheck(blockState, pos, env)) {
+                            if (blockState.hasBlockEntity())
+                                env.world.removeBlockEntity(pos)
+                            if (!blockState.isAir)
+                                env.world.removeBlock(pos, false)
+                        }
                     }
                 }
             }
@@ -101,6 +87,21 @@ class OpSaveStructure : SpellAction {
             val image2 = image.copy(stack = stack)
 
             return image2
+        }
+
+        fun blockCheck(blockState: BlockState, pos: BlockPos, env: CastingEnvironment): Boolean {
+            if (blockState.isAir) return false
+            if (blockState.`is`(HexstructionBlockTags.STRUCTURE_SAVE_BANNED)) return false
+            if (blockState.block.defaultDestroyTime() == -1f) return false
+            if (blockState.getDestroySpeed(env.world, pos) < 0f) return false
+            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(
+                    env.world,
+                    pos,
+                    env.world.getBlockState(pos),
+                    env.castingEntity as? ServerPlayer
+                )) return false
+
+            return true
         }
     }
 }
