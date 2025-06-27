@@ -26,7 +26,6 @@ import org.agent.hexstruction.Utils
 import org.agent.hexstruction.getStructureNBT
 import org.agent.hexstruction.getStructureSettings
 import org.agent.hexstruction.misc.TimedBlockDisplay
-import org.agent.hexstruction.mixin.BlockDisplayInvoker
 
 object OpDisplayStructure : SpellAction {
     override val argc = 3
@@ -77,7 +76,7 @@ object OpDisplayStructure : SpellAction {
                     setPos(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
                 }
 
-                (blockDisplay as BlockDisplayInvoker).invokeSetBlockState(blockState)
+                blockDisplay.setBlockState(blockState)
                 env.world.addFreshEntity(blockDisplay)
                 blockDisplay.tick()
             }
