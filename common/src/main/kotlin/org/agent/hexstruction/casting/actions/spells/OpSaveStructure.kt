@@ -13,6 +13,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.phys.Vec3
@@ -68,7 +69,7 @@ object OpSaveStructure : SpellAction {
                             if (blockState.hasBlockEntity())
                                 env.world.removeBlockEntity(pos)
                             if (!blockState.isAir)
-                                env.world.removeBlock(pos, false)
+                                env.world.setBlock(pos, Blocks.AIR.defaultBlockState(), 19)
                         }
                     }
                 }
