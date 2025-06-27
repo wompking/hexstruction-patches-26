@@ -1,7 +1,5 @@
 modid = "hexstruction"
 book = "hexcasting:thehexbook"
-default_lang = "en_us"
-default_branch = "main"
 
 resource_dirs = [  # top takes priority
     "resources",
@@ -18,7 +16,7 @@ resource_dirs = [  # top takes priority
 export_dir = "src/hexdoc_hexstruction/_export/generated"
 
 [template]
-icon = "icon.png"
+icon = "{$_common.src}/main/resources/assets/hexstruction/icon.png"
 include = [
     "hexstruction",
     "hexcasting",
@@ -31,13 +29,12 @@ author = "PetersonE1"
 show_landing_text = false
 
 [extra.hexcasting]
-# regexes for parsing pattern registry files - try running copier update and picking a different regex if your patterns aren't loading
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
-_pattern_regex = { "!Raw"='\s*(?:Register)\("(?P<name>[a-zA-Z0-9_\/]+)",\s*"(?P<signature>[aqweds]+)",\s*HexDir\.(?P<startdir>\w+)' }
-_per_world_value = "true"
+_pattern_regex = { "!Raw"='(?P<is_per_world>make|makePerWorld)\("(?P<name>[^"]+)",\s*HexDir\.(?P<startdir>\w+),\s*"(?P<signature>[qweasd]+)"' }
+_per_world_value = "makePerWorld"
 
 [[extra.hexcasting.pattern_stubs]]
-path = "{$_common.package}/HexStructionPatterns.java"
+path = "{$_common.kotlin}/registry/HexstructionActions.kt"
 regex = "{^_pattern_regex}"
 per_world_value = "{^_per_world_value}"
 
@@ -45,12 +42,15 @@ per_world_value = "{^_per_world_value}"
 
 [_common]
 src = "../common/src"
-package = "{src}/main/java/org/agent/hexstruction"
+java = "{src}/main/java/org/agent/hexstruction"
+kotlin = "{src}/main/kotlin/org/agent/hexstruction"
 
 [_fabric]
 src = "../fabric/src"
-package = "{src}/main/java/org/agent/hexstruction/fabric"
+java = "{src}/main/java/org/agent/hexstruction/fabric"
+kotlin = "{src}/main/kotlin/org/agent/hexstruction/fabric"
 
 [_forge]
 src = "../forge/src"
-package = "{src}/main/java/org/agent/hexstruction/forge"
+java = "{src}/main/java/org/agent/hexstruction/forge"
+kotlin = "{src}/main/kotlin/org/agent/hexstruction/forge"

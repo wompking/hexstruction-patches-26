@@ -1,35 +1,46 @@
-modLoader = "javafml"
-loaderVersion = "[47,)"
-#issueTrackerURL = ""
+modLoader = "kotlinforforge"
+loaderVersion = "[${versions.kotlin_forge},)"
 license = "MIT"
 
 [[mods]]
 modId = "hexstruction"
 version = "${version}"
 displayName = "HexStruction"
-authors = ""
-description = '''
-
-'''
-#logoFile = ""
+logoFile = "assets/hexstruction/icon.png"
+authors = "PetersonE1"
+description = "Structure manipulation with Hex Casting"
 
 [[dependencies.hexstruction]]
 modId = "forge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[${versions.forge_dependency},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexstruction]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.1,)"
+versionRange = "[${versions.minecraft},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexstruction]]
 modId = "architectury"
 mandatory = true
-versionRange = "[9.2.14,)"
-ordering = "AFTER"
+versionRange = "[${versions.architectury},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexstruction]]
+modId = "cloth_config"
+mandatory = true
+versionRange = "[${versions.cloth_config},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexstruction]]
+modId = "hexcasting"
+mandatory = true
+versionRange = "[${versions.hexcasting_dependency},)"
+ordering = "NONE"
 side = "BOTH"

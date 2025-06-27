@@ -1,8 +1,8 @@
 {
   hexdoc: {
-    "hexstruction": {
+    hexstruction: {
       title: "HexStruction Book",
-      description: "The HexStruction Book, all in one place.",
+      description: "Structure manipulation with Hex Casting",
     },
   }
 }

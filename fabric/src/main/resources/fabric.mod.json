@@ -3,38 +3,45 @@
   "id": "hexstruction",
   "version": "${version}",
   "name": "HexStruction",
-  "description": "",
+  "description": "Structure manipulation with Hex Casting",
   "authors": [
-    ""
+    "PetersonE1"
   ],
   "contact": {
-    "homepage": ""
+    "homepage": "https://petersone1.github.io/hexstruction",
+    "sources": "https://github.com/PetersonE1/hexstruction"
   },
   "license": "MIT",
   "icon": "assets/hexstruction/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "org.agent.hexstruction.fabric.HexstructionFabric"
-    ],
-    "client": [
-      "org.agent.hexstruction.fabric.client.HexstructionFabricClient"
-    ],
-    "fabric-datagen": [
-      "org.agent.hexstruction.fabric.client.datagen.DataGenerator"
-    ]
+    "main": [{
+      "adapter": "kotlin",
+      "value": "org.agent.hexstruction.fabric.FabricHexstruction"
+    }],
+    "client": [{
+      "adapter": "kotlin",
+      "value": "org.agent.hexstruction.fabric.FabricHexstructionClient"
+    }],
+    "modmenu": [{
+      "adapter": "kotlin",
+      "value": "org.agent.hexstruction.fabric.FabricHexstructionModMenu"
+    }]
   },
   "mixins": [
-    "hexstruction.mixins.json"
+    "hexstruction-common.mixins.json",
+    "hexstruction-fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.13",
-    "minecraft": "~1.20.1",
-    "java": ">=17",
-    "architectury": ">=9.2.14",
-    "fabric-api": "*"
+    "minecraft": "${versions.minecraft}",
+    "fabricloader": ">=${versions.fabric_loader}",
+    "fabric-api": ">=${versions.fabric_api}",
+    "fabric-language-kotlin": ">=${versions.kotlin_fabric}",
+    "architectury": ">=${versions.architectury}",
+    "hexcasting": ">=${versions.hexcasting_dependency}",
+    "cloth-config": ">=${versions.clothConfig}"
   },
   "suggests": {
-    "another-mod": "*"
+    "modmenu": ">=${versions.modMenu}"
   }
 }

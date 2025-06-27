@@ -29,7 +29,7 @@ public final class StructureManager extends SavedData {
 
     private static StructureManager GetServerManager(MinecraftServer server) {
         DimensionDataStorage storage = server.overworld().getDataStorage();
-        return storage.computeIfAbsent(StructureManager::CreateFromNBT, StructureManager::new, Hexstruction.MOD_ID);
+        return storage.computeIfAbsent(StructureManager::CreateFromNBT, StructureManager::new, Hexstruction.MODID);
     }
 
     public static UUID SaveStructure(Level world, CompoundTag structureNBT) {
