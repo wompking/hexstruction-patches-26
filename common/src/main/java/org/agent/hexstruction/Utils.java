@@ -3,15 +3,11 @@ package org.agent.hexstruction;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import kotlin.Pair;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
-import org.agent.hexstruction.mixin.StructureTemplateAccessor;
 
 public final class Utils {
     public static Vec3i GetVec3i(Vec3 vector) {

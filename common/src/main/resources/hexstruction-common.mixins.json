@@ -6,8 +6,6 @@
   "client": [
   ],
   "mixins": [
-    "PaletteAccessor",
-    "StructureTemplateAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
