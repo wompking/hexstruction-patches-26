@@ -32,6 +32,7 @@
     "hexstruction-common.mixins.json",
     "hexstruction-fabric.mixins.json"
   ],
+  "accessWidener": "hexstruction.accesswidener",
   "depends": {
     "minecraft": "${versions.minecraft}",
     "fabricloader": ">=${versions.fabric_loader}",
